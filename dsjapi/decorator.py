@@ -5,18 +5,6 @@ from django.http import JsonResponse, HttpResponse
 from . import exceptions
 from . import fields
 
-class ValidatedRequest:
-
-    def __init__(self, fields):
-        self._fields = fields
-
-    def __getitem__(self, key):
-        return self._fields[key]
-
-    def __getattr__(self, name):
-        return self[name]
-
-
 def api(field=None):
 
     def decorator(func):
@@ -52,8 +40,7 @@ def api(field=None):
                 else:
                     cleanedData = requestData
 
-                validated_request = ValidatedRequest(cleanedData)
-                response = func(validated_request)
+                response = func(cleanedData)
 
                 if isinstance(response, HttpResponse):
                     return response
