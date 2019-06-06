@@ -5,6 +5,6 @@ setup(
     author='Francesco Zoccheddu',
     version='0.0.1',
     description='Create simple JSON APIs with Django',
-    packages=['djsa'],
+    packages=['dsjapi'],
     install_requires=['django']
 )
