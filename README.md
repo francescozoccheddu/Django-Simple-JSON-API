@@ -1,6 +1,24 @@
 # Django Simple JSON API
 ## Install
 `pip install django-simple-json-api`
+## Instructions
+Add `dsjapi.decorators.api` or `dsjapi.decorators.api_rq` to your view function.  
+Return a JSON serializable object or a `django.http.HttpResponse` object.  
+Raising a `dsjapi.exceptions.ServerException` exception will automatically return the appropriate JSON response.
+### Decorator parameters
+- **`field`**  
+    `dsjapi.fields.Field`  
+    Expected field in request body. Default is `None`.
+- **`allowedMethods`**  
+    `list` of `str`  
+    Allowed HTTP methods (uppercase). Default is `["GET", "POST"]`.
+- **`safeEncoding`**  
+    `bool`  
+    `True` to allow non-`dict` response objects. Default is `False`.
+ ### `@api` vs `@api_rq`
+- `@api` only provides the validated request data.  
+- `@api_rq` provides a `dsjapi.decorators.Request` object that contains both `request` (the original `django.http.HttpRequest` object) and `data` (the validated request data) attributes.
+
 ## Examples
 ### Views
 ```python
