@@ -22,7 +22,7 @@ Raising a `dsjapi.exceptions.ServerException` exception will automatically retur
 ## Examples
 ### Views
 ```python
-from dsjapi.decorator import api
+from dsjapi.decorators import api
 from dsjapi.fields import *
 
 @api (DictField ({
@@ -35,7 +35,7 @@ def index (data):
     return { "result": result }
 ```
 ```python
-from dsjapi.decorator import api
+from dsjapi.decorators import api
 from dsjapi.fields import *
 
 @api (DictField ({
@@ -51,7 +51,7 @@ def index (data):
     return { "route": route }
 ```
 ```python
-from dsjapi.decorator import api
+from dsjapi.decorators import api
 from dsjapi.fields import *
 
 @api (DictField ({
@@ -65,7 +65,7 @@ def index (data):
     return { "average": avg }
 ```
 ```python
-from dsjapi.decorator import api
+from dsjapi.decorators import api
 from dsjapi.fields import *
 from dsjapi.exceptions import *
 
