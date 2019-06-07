@@ -58,9 +58,9 @@ from dsjapi.exceptions import *
 def index (data):
     user = getUserById (data["id"])
     if user is None:
-        raise NotFoundException ("User not found", { "id": data["id"] })
+        raise NotFoundException ("User not found")
     if user.getPassword () != data["password"]:
-        raise AuthenticationException ("Wrong password", { "id": data["id"] })
+        raise AuthenticationException ("Wrong password")
     return { "id": user.getId (), "score": user.getScore () }
 ```
 ### Custom fields
