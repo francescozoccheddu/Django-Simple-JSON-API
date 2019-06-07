@@ -83,10 +83,10 @@ class ScalarField(TypeField):
 
     def clean(self, value):
         value = super().clean(value)
-        if self._min is not None and value > self._min:
-            raise FieldException("Value must be < {}".format(self._min))
-        if self._max is not None and value > self._min:
-            raise FieldException("Value must be > {}".format(self._max))
+        if self._min is not None and value < self._min:
+            raise FieldException("Value must be >= {}".format(self._min))
+        if self._max is not None and value > self._max:
+            raise FieldException("Value must be <= {}".format(self._max))
         return value
 
 
@@ -128,7 +128,7 @@ class StringField(TypeField):
     def clean(self, value):
         value = super().clean(value)
         if self._minLength is not None and len(value) < self._minLength:
-            raise FieldException('String must be longer at least {} characters'.format(self._minLength))
+            raise FieldException('String must be at least {} characters long'.format(self._minLength))
         if self._maxLength is not None and len(value) > self._maxLength:
             raise FieldException('String cannot be longer than {} characters'.format(self._maxLength))
         if self._regex is not None and not self._regex.match(value):
@@ -156,9 +156,9 @@ class ListField(TypeField):
     def clean(self, value):
         value = super().clean(value)
         if self._minLength is not None and len(value) < self._minLength:
-            raise FieldException('List must be longer at least {} characters'.format(self._minLength))
+            raise FieldException('List length must be >= {}'.format(self._minLength))
         if self._maxLength is not None and len(value) > self._maxLength:
-            raise FieldException('List cannot be longer than {} characters'.format(self._maxLength))
+            raise FieldException('List length must be <= {}'.format(self._maxLength))
         if self._fields is not None:
             if isinstance(self._fields, list):
                 fields = self._fields
@@ -207,10 +207,10 @@ class TimeField(TypeField):
             raise FieldException("Invalid datetime: {}".format(str(e)))
         except OverflowError as e:
             raise FieldException("Overflow error")
-        if self._min is not None and value > self._min:
-            raise FieldException("Value must be < {}".format(self._min))
-        if self._max is not None and value > self._min:
-            raise FieldException("Value must be > {}".format(self._max))
+        if self._min is not None and value < self._min:
+            raise FieldException("Value must be >= {}".format(self._min))
+        if self._max is not None and value > self._max:
+            raise FieldException("Value must be <= {}".format(self._max))
         return value
 
 
