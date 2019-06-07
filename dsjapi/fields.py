@@ -1,5 +1,6 @@
 from enum import Enum, auto
 import dateutil
+import re
 
 class FieldException(Exception):
 
@@ -113,7 +114,7 @@ class StringField(TypeField):
         super().__init__(str, missing=missing, error=error, default=default)
         self._minLength = minLength
         self._maxLength = maxLength
-        self._regex = regex
+        self._regex = re.compile(regex) if regex is not None else None
 
     def getMinLength(self):
         return self._minLength
