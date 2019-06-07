@@ -9,7 +9,7 @@ with open(_README_PATH, 'r') as file:
 setup(
     name='django-simple-json-api',
     author='Francesco Zoccheddu',
-    version='0.0.2',
+    version='0.0.3',
     description='Create simple JSON APIs with Django',
     long_description=_README,
     long_description_content_type='text/markdown',
