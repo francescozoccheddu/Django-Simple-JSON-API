@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from . import exceptions
 from . import fields
 
+
 def api(field=None):
 
     def decorator(func):
@@ -24,7 +25,7 @@ def api(field=None):
                     try:
                         requestData = json.loads(request.body)
                     except ValueError as e:
-                        raise exceptions.BadRequestException("Error while parsing JSON content", {"error": str(e)})
+                        raise exceptions.BadRequestException("Error while parsing JSON content: {}".format(str(e)))
 
                 if field is not None:
                     if not isinstance(field, fields.Field):
@@ -36,7 +37,7 @@ def api(field=None):
                             cleanedData = v
                         field.cleanAndAdd(requestData is not None, requestData, add)
                     except fields.FieldException as e:
-                        raise exceptions.BadRequestException("Field exception: {}".format(e.getMessage()))
+                        raise exceptions.BadRequestException("Field exception", e)
                 else:
                     cleanedData = requestData
 
@@ -55,5 +56,3 @@ def api(field=None):
         return wrappedFunc
 
     return decorator
-
-

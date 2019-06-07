@@ -1,14 +1,13 @@
 from enum import Enum, auto
 import dateutil
 import re
+from . import exceptions
 
-class FieldException(Exception):
 
-    def __init__(self, message):
-        self._message = message
+class FieldException(exceptions.CommonException):
 
-    def getMessage(self):
-        return self._message
+    def __init__(self, message, cause=None):
+        super().__init__(message, cause)
 
 
 class Field:
@@ -62,9 +61,18 @@ class TypeField(Field):
     def getType(self):
         return self._type
 
+    @staticmethod
+    def formatTypeConstraint(typeConstraint):
+        if isinstance(typeConstraint, type):
+            return typeConstraint.__name__
+        elif isinstance(typeConstraint, (tuple, list)):
+            return " or ".join(map(lambda t: t.__name__, typeConstraint))
+        else:
+            return "<error type>"
+
     def clean(self, value):
         if not isinstance(value, self._type):
-            raise FieldException("Expected type {}".format(self._type))
+            raise FieldException("Expected type {}".format(TypeField.formatTypeConstraint(self._type)))
         return value
 
 
@@ -163,7 +171,7 @@ class ListField(TypeField):
             if isinstance(self._fields, list):
                 fields = self._fields
             elif isinstance(self._fields, Field):
-                fields = [None] * len(value)
+                fields = [self._fields] * len(value)
             else:
                 raise TypeError("Bad type fields type")
             items = []
@@ -172,7 +180,7 @@ class ListField(TypeField):
                     try:
                         fields[i].cleanAndAdd(True, item, items.append)
                     except FieldException as e:
-                        raise FieldException("Field exception on item {}: {}".format(i, e.getMessage()))
+                        raise FieldException("Field exception on item {}".format(i), e)
                 else:
                     items.append(item)
             value = items
@@ -234,7 +242,7 @@ class DictField(TypeField):
                             dictionary[key] = v
                         self._fields.cleanAndAdd(True, item, add)
                     except FieldException as e:
-                        raise FieldException('Field exception on item "{}": {}'.format(key, e.getMessage()))
+                        raise FieldException('Field exception on item "{}"'.format(key), e)
             elif isinstance(self._fields, dict):
                 for key, item in self._fields.items():
                     try:
@@ -243,7 +251,7 @@ class DictField(TypeField):
                         present = key in value
                         self._fields[key].cleanAndAdd(present, value[key] if present else None, add)
                     except FieldException as e:
-                        raise FieldException('Field exception on item "{}": {}'.format(key, e.getMessage()))
+                        raise FieldException('Field exception on item "{}"'.format(key), e)
                 unexpected = set(value.keys()) - set(self._fields.keys())
                 if len(unexpected) > 0:
                     raise FieldException('Unexpected fields {}'.format(unexpected))
