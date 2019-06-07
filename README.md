@@ -57,9 +57,9 @@ def index (data):
     user = getUserById (data["id"])
     if user is None:
         raise NotFoundException ("User not found", { "id": data["id"] })
-    if user.getPassword() != data["password"]:
+    if user.getPassword () != data["password"]:
         raise AuthenticationException ("Wrong password", { "id": data["id"] })
-    return { "id": user.getId(), "score": user.getScore() }
+    return { "id": user.getId (), "score": user.getScore () }
 ```
 ### Custom fields
 ```python
@@ -73,6 +73,6 @@ class EvenNumberField (IntField):
     def clean (self, value):
         value = super ().clean (value)
         if value % 2 != 0:
-            raise FieldException("Number must even")
+            raise FieldException ("Odd number")
         return value
 ```
