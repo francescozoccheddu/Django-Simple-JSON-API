@@ -1,4 +1,6 @@
 # Django Simple JSON API
+## Install
+`pip install django-simple-json-api`
 ## Examples
 ### Views
 ```python
